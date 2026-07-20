@@ -14,8 +14,7 @@ class OperationTypeModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['code', 'name', 'description'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
+    protected $useTimestamps = false;
 
     public function getAllOperationTypes(): array
     {

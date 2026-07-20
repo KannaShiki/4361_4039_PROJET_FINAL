@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/home/rhia/Musique/4361_4039_PROJET_FINAL/phpunit.xml.dist" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.074644">
+    <testsuite name="App" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.074644">
+      <testsuite name="AdminFeeBracketValidationTest" file="/home/rhia/Musique/4361_4039_PROJET_FINAL/tests/unit/AdminFeeBracketValidationTest.php" tests="1" assertions="0" errors="1" failures="0" skipped="0" time="0.074644">
+        <testcase name="testCanInsertPrefixWithoutTimestampColumns" file="/home/rhia/Musique/4361_4039_PROJET_FINAL/tests/unit/AdminFeeBracketValidationTest.php" line="11" class="AdminFeeBracketValidationTest" classname="AdminFeeBracketValidationTest" assertions="0" time="0.074644">
+          <error type="CodeIgniter\Database\Exceptions\DatabaseException">AdminFeeBracketValidationTest::testCanInsertPrefixWithoutTimestampColumns
+CodeIgniter\Database\Exceptions\DatabaseException: no such table: db_operator_prefixes
+
+/home/rhia/Musique/4361_4039_PROJET_FINAL/system/Database/BaseConnection.php:865
+/home/rhia/Musique/4361_4039_PROJET_FINAL/system/Database/BaseBuilder.php:2345
+/home/rhia/Musique/4361_4039_PROJET_FINAL/system/Model.php:355
+/home/rhia/Musique/4361_4039_PROJET_FINAL/system/BaseModel.php:899
+/home/rhia/Musique/4361_4039_PROJET_FINAL/system/Model.php:668
+/home/rhia/Musique/4361_4039_PROJET_FINAL/tests/unit/AdminFeeBracketValidationTest.php:16</error>
+        </testcase>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

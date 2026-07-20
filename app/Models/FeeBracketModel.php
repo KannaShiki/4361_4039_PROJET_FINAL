@@ -14,8 +14,7 @@ class FeeBracketModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['operation_type_id', 'min_amount', 'max_amount', 'fee_amount', 'fee_percentage'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
+    protected $useTimestamps = false;
 
     public function getAllFeeBrackets(): array
     {

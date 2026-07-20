@@ -15,6 +15,7 @@
             </div>
             <div class="card-body">
                 <form action="/admin/add-fee-bracket" method="post">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label for="operation_type_id" class="form-label">Type d'Operation</label>
                         <select class="form-select" id="operation_type_id" name="operation_type_id" required>

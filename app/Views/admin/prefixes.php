@@ -15,6 +15,7 @@
             </div>
             <div class="card-body">
                 <form action="/admin/add-prefix" method="post">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label for="prefix" class="form-label">Prefixe (3 chiffres)</label>
                         <input type="text" class="form-control" id="prefix" name="prefix" 

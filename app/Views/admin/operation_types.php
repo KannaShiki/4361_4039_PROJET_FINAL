@@ -15,6 +15,7 @@
             </div>
             <div class="card-body">
                 <form action="/admin/add-operation-type" method="post">
+                    <?= csrf_field() ?>
                     <div class="mb-3">
                         <label for="code" class="form-label">Code</label>
                         <input type="text" class="form-control" id="code" name="code" 

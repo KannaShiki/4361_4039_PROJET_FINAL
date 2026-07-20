@@ -16,6 +16,8 @@ class Admin extends BaseController
 
     public function __construct()
     {
+        helper('form');
+
         $this->prefixModel = new OperatorPrefixModel();
         $this->operationTypeModel = new OperationTypeModel();
         $this->feeBracketModel = new FeeBracketModel();
@@ -52,7 +54,8 @@ class Admin extends BaseController
         }
 
         try {
-            $this->prefixModel->insert(['prefix' => $prefix]);
+            $data = ['prefix' => (string)$prefix];
+            $this->prefixModel->insert($data);
             return redirect()->to('/admin/prefixes')->with('success', 'Prefixe ajoute avec succes');
         } catch (\Exception $e) {
             return redirect()->to('/admin/prefixes')->with('error', 'Ce prefixe existe deja');
@@ -89,11 +92,12 @@ class Admin extends BaseController
         }
 
         try {
-            $this->operationTypeModel->insert([
-                'code' => $code,
-                'name' => $name,
-                'description' => $description
-            ]);
+            $data = [
+                'code' => (string)$code,
+                'name' => (string)$name,
+                'description' => $description ? (string)$description : null
+            ];
+            $this->operationTypeModel->insert($data);
             return redirect()->to('/admin/operation-types')->with('success', 'Type d\'operation ajoute avec succes');
         } catch (\Exception $e) {
             return redirect()->to('/admin/operation-types')->with('error', 'Ce code existe deja');
@@ -111,6 +115,14 @@ class Admin extends BaseController
     }
 
     // ==================== BAREMES DE FRAIS ====================
+
+    protected function hasRequiredFeeBracketFields($operationTypeId, $minAmount, $maxAmount, $feeAmount): bool
+    {
+        return $operationTypeId !== null && $operationTypeId !== ''
+            && $minAmount !== null && $minAmount !== ''
+            && $maxAmount !== null && $maxAmount !== ''
+            && $feeAmount !== null && $feeAmount !== '';
+    }
     
     public function feeBrackets(): string
     {
@@ -128,22 +140,25 @@ class Admin extends BaseController
         $feeAmount = $this->request->getPost('fee_amount');
         $feePercentage = $this->request->getPost('fee_percentage');
         
-        if (empty($operationTypeId) || empty($minAmount) || empty($maxAmount) || empty($feeAmount)) {
+        if (!$this->hasRequiredFeeBracketFields($operationTypeId, $minAmount, $maxAmount, $feeAmount)) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Tous les champs sont obligatoires');
         }
 
-        if ($minAmount >= $maxAmount) {
+        $minAmountValue = (float) $minAmount;
+        $maxAmountValue = (float) $maxAmount;
+        if ($minAmountValue >= $maxAmountValue) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Le montant minimum doit etre inferieur au montant maximum');
         }
 
         try {
-            $this->feeBracketModel->insert([
-                'operation_type_id' => $operationTypeId,
-                'min_amount' => $minAmount,
-                'max_amount' => $maxAmount,
-                'fee_amount' => $feeAmount,
-                'fee_percentage' => $feePercentage ?? 0
-            ]);
+            $data = [
+                'operation_type_id' => (int)$operationTypeId,
+                'min_amount' => $minAmountValue,
+                'max_amount' => $maxAmountValue,
+                'fee_amount' => (float)$feeAmount,
+                'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0)
+            ];
+            $this->feeBracketModel->insert($data);
             return redirect()->to('/admin/fee-brackets')->with('success', 'Bareme de frais ajoute avec succes');
         } catch (\Exception $e) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Erreur lors de l\'ajout');
@@ -171,22 +186,25 @@ class Admin extends BaseController
         $feeAmount = $this->request->getPost('fee_amount');
         $feePercentage = $this->request->getPost('fee_percentage');
         
-        if (empty($operationTypeId) || empty($minAmount) || empty($maxAmount) || empty($feeAmount)) {
+        if (!$this->hasRequiredFeeBracketFields($operationTypeId, $minAmount, $maxAmount, $feeAmount)) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Tous les champs sont obligatoires');
         }
 
-        if ($minAmount >= $maxAmount) {
+        $minAmountValue = (float) $minAmount;
+        $maxAmountValue = (float) $maxAmount;
+        if ($minAmountValue >= $maxAmountValue) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Le montant minimum doit etre inferieur au montant maximum');
         }
 
         try {
-            $this->feeBracketModel->update($id, [
-                'operation_type_id' => $operationTypeId,
-                'min_amount' => $minAmount,
-                'max_amount' => $maxAmount,
-                'fee_amount' => $feeAmount,
-                'fee_percentage' => $feePercentage ?? 0
-            ]);
+            $data = [
+                'operation_type_id' => (int)$operationTypeId,
+                'min_amount' => $minAmountValue,
+                'max_amount' => $maxAmountValue,
+                'fee_amount' => (float)$feeAmount,
+                'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0)
+            ];
+            $this->feeBracketModel->update($id, $data);
             return redirect()->to('/admin/fee-brackets')->with('success', 'Bareme de frais modifie avec succes');
         } catch (\Exception $e) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Erreur lors de la modification');

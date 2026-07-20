@@ -57,23 +57,4 @@
         </div>
     </div>
 </div>
-
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Bienvenue dans le panneau d'administration</h5>
-                <p class="card-text">
-                    Utilisez le menu de navigation ou les cartes ci-dessus pour acceder aux differentes fonctionnalites de gestion.
-                </p>
-                <ul>
-                    <li><strong>Prefixes :</strong> Gerer les prefixes de numeros autorises (ex: 033, 037)</li>
-                    <li><strong>Types d'Operations :</strong> Gerer les types d'operations disponibles (depot, retrait, transfert)</li>
-                    <li><strong>Baremes de Frais :</strong> Configurer les frais par tranche pour chaque type d'operation</li>
-                    <li><strong>Comptes Clients :</strong> Visualiser la situation des comptes clients et leurs soldes</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
 <?= $this->endSection() ?>
