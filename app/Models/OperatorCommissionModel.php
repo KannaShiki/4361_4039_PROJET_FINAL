@@ -14,9 +14,7 @@ class OperatorCommissionModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['operator_prefix_id', 'commission_percentage', 'commission_amount'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = '';
+    protected $useTimestamps = false;
 
     public function getAllCommissions(): array
     {

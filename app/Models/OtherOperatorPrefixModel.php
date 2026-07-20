@@ -14,9 +14,7 @@ class OtherOperatorPrefixModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['prefix', 'operator_name'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = '';
+    protected $useTimestamps = false;
 
     public function getAllPrefixes(): array
     {
