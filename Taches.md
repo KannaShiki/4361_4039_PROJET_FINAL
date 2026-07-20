@@ -49,6 +49,17 @@
 - Gestion des erreurs : solde insuffisant, numero invalide, etc.
 - Interface responsive avec Bootstrap.
 
+### Requetes / base.sql
+
+- Le fichier `base.sql` doit contenir un seul script a la racine du projet.
+- Ce fichier doit inclure la creation des tables, des vues et des donnees initiales.
+- Ce fichier est requis pour repondre au point "base.sql" du sujet.
+
+
+### Suivi des livraisons
+
+- A chaque livraison, ajouter dans ce fichier les nouveaux travaux effectues par chaque etudiant.
+- Bien indiquer les modifications realisees pour v1, v2, v3.
 
 ### Livraison
 
