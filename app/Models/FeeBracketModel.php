@@ -12,7 +12,7 @@ class FeeBracketModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['operation_type_id', 'min_amount', 'max_amount', 'fee_amount', 'fee_percentage'];
+    protected $allowedFields = ['operation_type_id', 'min_amount', 'max_amount', 'fee_amount', 'fee_percentage', 'is_other_operator'];
 
     protected $useTimestamps = false;
 
@@ -32,11 +32,12 @@ class FeeBracketModel extends Model
                     ->findAll();
     }
 
-    public function calculateFee(int $operationTypeId, float $amount): float
+    public function calculateFee(int $operationTypeId, float $amount, bool $isOtherOperator = false): float
     {
         $bracket = $this->where('operation_type_id', $operationTypeId)
                         ->where('min_amount <=', $amount)
                         ->where('max_amount >=', $amount)
+                        ->where('is_other_operator', $isOtherOperator ? 1 : 0)
                         ->first();
 
         if ($bracket) {

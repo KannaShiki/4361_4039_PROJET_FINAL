@@ -37,17 +37,36 @@
                                     <th>Frais (Ar)</th>
                                     <th>Solde Avant (Ar)</th>
                                     <th>Solde Apres (Ar)</th>
+                                    <th>Details</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($transactions as $transaction): ?>
                                 <tr>
                                     <td><?= esc($transaction['created_at']) ?></td>
-                                    <td><?= esc($transaction['description']) ?></td>
+                                    <td>
+                                        <?= esc($transaction['description']) ?>
+                                        <?php if ($transaction['is_multi_send']): ?>
+                                            <span class="badge bg-primary">Multi-Envoi</span>
+                                        <?php endif; ?>
+                                        <?php if ($transaction['include_withdrawal_fee']): ?>
+                                            <span class="badge bg-info">Frais retrait inclus</span>
+                                        <?php endif; ?>
+                                    </td>
                                     <td><?= number_format($transaction['amount'], 2, ',', ' ') ?></td>
                                     <td><?= number_format($transaction['fee'], 2, ',', ' ') ?></td>
                                     <td><?= number_format($transaction['balance_before'], 2, ',', ' ') ?></td>
                                     <td><?= number_format($transaction['balance_after'], 2, ',', ' ') ?></td>
+                                    <td>
+                                        <?php if ($transaction['is_multi_send']): ?>
+                                            <button type="button" class="btn btn-sm btn-outline-primary" 
+                                                    data-bs-toggle="modal" data-bs-target="#multiSendModal<?= $transaction['id'] ?>">
+                                                Voir details
+                                            </button>
+                                        <?php else: ?>
+                                            -
+                                        <?php endif; ?>
+                                    </td>
                                 </tr>
                                 <?php endforeach; ?>
                             </tbody>
@@ -57,6 +76,46 @@
             </div>
         </div>
     </div>
+
+    <!-- Modals for multi-send details -->
+    <?php foreach ($transactions as $transaction): ?>
+        <?php if ($transaction['is_multi_send']): ?>
+            <div class="modal fade" id="multiSendModal<?= $transaction['id'] ?>" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Details du Multi-Envoi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Date:</strong> <?= esc($transaction['created_at']) ?></p>
+                            <p><strong>Montant total:</strong> <?= number_format($transaction['amount'], 2, ',', ' ') ?> Ar</p>
+                            <p><strong>Frais totaux:</strong> <?= number_format($transaction['fee'], 2, ',', ' ') ?> Ar</p>
+                            <p><strong>Destinataires:</strong></p>
+                            <ul>
+                                <?php
+                                $multiSendModel = new \App\Models\MultiSendRecipientModel();
+                                $recipients = $multiSendModel->getRecipientsByTransactionId($transaction['id']);
+                                foreach ($recipients as $recipient):
+                                ?>
+                                    <li>
+                                        <?= esc($recipient['recipient_phone']) ?> - 
+                                        <?= number_format($recipient['amount'], 2, ',', ' ') ?> Ar
+                                        <?php if ($recipient['fee'] > 0): ?>
+                                            (Frais retrait: <?= number_format($recipient['fee'], 2, ',', ' ') ?> Ar)
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    <?php endforeach; ?>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

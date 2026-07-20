@@ -34,6 +34,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/client-accounts">Comptes Clients</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/transactions">Transactions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/other-operator-prefixes">Prefixes Autres Operateurs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/operator-commissions">Commissions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/financial-reports">Rapports Financiers</a>
+                    </li>
                 </ul>
             </div>
         </div>

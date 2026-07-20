@@ -46,6 +46,7 @@
                             <a href="<?= base_url('/client/deposit') ?>" class="btn btn-success">Depot</a>
                             <a href="<?= base_url('/client/withdraw') ?>" class="btn btn-warning">Retrait</a>
                             <a href="<?= base_url('/client/transfer') ?>" class="btn btn-info">Transfert</a>
+                            <a href="<?= base_url('/client/multi-transfer') ?>" class="btn btn-primary">Multi-Envoi</a>
                             <a href="<?= base_url('/client/history') ?>" class="btn btn-secondary">Historique</a>
                         </div>
                     </div>

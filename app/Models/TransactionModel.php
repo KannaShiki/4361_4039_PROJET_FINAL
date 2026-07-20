@@ -12,10 +12,9 @@ class TransactionModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['client_id', 'operation_type_id', 'amount', 'fee', 'balance_before', 'balance_after', 'recipient_phone', 'description'];
+    protected $allowedFields = ['client_id', 'operation_type_id', 'amount', 'fee', 'balance_before', 'balance_after', 'recipient_phone', 'description', 'include_withdrawal_fee', 'is_multi_send', 'operator_id'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
+    protected $useTimestamps = false;
 
     public function getClientTransactions(int $clientId): array
     {

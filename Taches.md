@@ -33,7 +33,7 @@
 - Verifier que le prefixe du numero est valide.
 - Creer automatiquement le compte client s il n existe pas.
 
-#### Dashboard client [Miamgola]
+#### Dashboard client [Miamgola] OK
 
 - Voir le solde actuel.
 - Faire un depot (simulation automatique).
@@ -41,7 +41,7 @@
 - Faire un transfert vers un autre numero (application des frais).
 - Voir l historique des operations.
 
-### Fonctionnalites transversales [Sandria]
+### Fonctionnalites transversales [Sandria] OK
 
 - Calcul automatique des frais selon les baremes pour les retraits et les transferts.
 - Mise a jour du solde apres chaque operation.
@@ -49,15 +49,40 @@
 - Gestion des erreurs : solde insuffisant, numero invalide, etc.
 - Interface responsive avec Bootstrap.
 
-### Suivi des livraisons
+## Livraison v2
 
-- A chaque livraison, ajouter dans ce fichier les nouveaux travaux effectues par chaque etudiant.
-- Bien indiquer les modifications realisees pour v1, v2, v3.
+### Base de donnees (base.sql) [Sandria]
 
-### Livraison
+- Creer la table `other_operator_prefixes` pour les prefixes d autres operateurs (ex. : `032`, `031`).
+- Modifier la table `fee_brackets` : ajouter champ `is_other_operator` (booleen) pour differencier les frais inter-operateurs.
+- Creer la table `operator_commissions` pour les commissions supplementaires par operateur.
+- Modifier la table `transactions` : ajouter champs `include_withdrawal_fee`, `is_multi_send`, `operator_id`.
+- Creer la table `multi_send_recipients` pour gerer les destinataires multiples d un envoi.
+- Inserer les donnees initiales pour les prefixes d autres operateurs et les commissions.
 
-- Mettre a jour `Taches.md` avec les travaux effectues.
-- Faire un dernier commit clair.
-- Creer le tag `v1` : `git tag v1`.
-- Pousser le tag : `git push origin v1`.
-- La version finale doit etre sur la branche `main`.
+### Cote operateur (Admin) [Miangola]
+
+- Implementer le CRUD des prefixes d autres operateurs (ajout / suppression).
+- Implementer le CRUD des commissions inter-operateurs (configurer les frais supplementaires).
+- Modifier la page "Situation des comptes clients" pour inclure des filtres par operateur.
+- Creer une page "Situation gain via les differents frais" avec separation gains propres vs autres operateurs.
+- Creer une page "Situation des montants a envoyer" montrant les sommes a transferer a chaque operateur.
+- Ajouter des rapports financiers detailles par operateur et par type d operation.
+
+### Cote client [Sandria]
+
+- Ajouter une option dans le formulaire de transfert pour inclure les frais de retrait dans le montant envoye.
+- Modifier le formulaire de transfert pour permettre l envoi vers plusieurs numeros (multi-envoi).
+- Implementer la logique de division automatique du montant entre plusieurs destinataires.
+- Ajouter la validation pour verifier que le montant est divisible par le nombre de destinataires.
+- Modifier l historique des operations pour afficher les details des multi-envois.
+- Afficher clairement dans le dashboard les frais appliques et les commissions inter-operateurs.
+
+### Fonctionnalites transversales [Miangola]
+
+- Implementer l algorithme de calcul des commissions inter-operateurs.
+- Implementer la logique de separation des gains (operateur propre vs autres operateurs).
+- Calculer automatiquement les montants a envoyer a chaque operateur selon les transactions effectuees.
+- Gerer les transactions multi-envois de maniere atomique (tout ou rien).
+- Mettre a jour les rapports financiers en temps reel.
+- Ameliorer la gestion des erreurs pour les scenarios multi-envois et inter-operateurs.

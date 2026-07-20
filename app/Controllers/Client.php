@@ -7,6 +7,8 @@ use App\Models\OperatorPrefixModel;
 use App\Models\TransactionModel;
 use App\Models\OperationTypeModel;
 use App\Models\FeeBracketModel;
+use App\Models\OtherOperatorPrefixModel;
+use App\Models\OperatorCommissionModel;
 
 class Client extends BaseController
 {
@@ -15,6 +17,8 @@ class Client extends BaseController
     protected $transactionModel;
     protected $operationTypeModel;
     protected $feeBracketModel;
+    protected $otherOperatorPrefixModel;
+    protected $operatorCommissionModel;
 
     public function __construct()
     {
@@ -23,6 +27,8 @@ class Client extends BaseController
         $this->transactionModel = new TransactionModel();
         $this->operationTypeModel = new OperationTypeModel();
         $this->feeBracketModel = new FeeBracketModel();
+        $this->otherOperatorPrefixModel = new OtherOperatorPrefixModel();
+        $this->operatorCommissionModel = new OperatorCommissionModel();
     }
 
     public function index(): string
@@ -175,6 +181,149 @@ class Client extends BaseController
         return redirect()->to('/client/dashboard')->with('success', 'Retrait effectue avec succes');
     }
 
+    public function multiTransfer(): string
+    {
+        return view('client/multi_transfer');
+    }
+
+    public function processMultiTransfer()
+    {
+        $clientId = session()->get('client_id');
+        if (!$clientId) {
+            return redirect()->to('/client');
+        }
+
+        $amount = (float) $this->request->getPost('amount');
+        $recipients = $this->request->getPost('recipients');
+        $includeWithdrawalFee = $this->request->getPost('include_withdrawal_fee') === 'on';
+
+        if ($amount <= 0) {
+            return redirect()->to('/client/multi-transfer')->with('error', 'Le montant doit etre superieur a 0');
+        }
+
+        if (empty($recipients) || !is_array($recipients)) {
+            return redirect()->to('/client/multi-transfer')->with('error', 'Au moins un destinataire est requis');
+        }
+
+        // Filter out empty recipients
+        $recipients = array_filter($recipients, function($phone) {
+            return !empty(trim($phone));
+        });
+
+        if (count($recipients) < 1) {
+            return redirect()->to('/client/multi-transfer')->with('error', 'Au moins un destinataire est requis');
+        }
+
+        // Validate that amount is divisible by number of recipients
+        $recipientCount = count($recipients);
+        $amountPerRecipient = $amount / $recipientCount;
+
+        // Check if amount is evenly divisible
+        if (abs($amountPerRecipient * $recipientCount - $amount) > 0.01) {
+            return redirect()->to('/client/multi-transfer')->with('error', 'Le montant doit etre divisible par le nombre de destinataires');
+        }
+
+        // Validate all recipient phone numbers
+        foreach ($recipients as $recipientPhone) {
+            if (!$this->prefixModel->isValidPrefix($recipientPhone)) {
+                return redirect()->to('/client/multi-transfer')->with('error', 'Le prefixe du numero ' . $recipientPhone . ' n\'est pas valide');
+            }
+        }
+
+        $client = $this->clientModel->find($clientId);
+        $balanceBefore = $client['balance'];
+
+        $operationType = $this->operationTypeModel->getByCode('transfert');
+        
+        // Calculate fees for each recipient
+        $totalFee = 0;
+        $withdrawalFeePerRecipient = 0;
+        
+        if ($includeWithdrawalFee) {
+            $withdrawalOperationType = $this->operationTypeModel->getByCode('retrait');
+            $withdrawalFeePerRecipient = $this->feeBracketModel->calculateFee($withdrawalOperationType['id'], $amountPerRecipient, false);
+        }
+        
+        foreach ($recipients as $recipientPhone) {
+            // Check if recipient is from another operator
+            $otherOperator = $this->otherOperatorPrefixModel->isValidOtherPrefix($recipientPhone);
+            $isOtherOperator = $otherOperator !== null;
+            
+            $fee = $this->feeBracketModel->calculateFee($operationType['id'], $amountPerRecipient, $isOtherOperator);
+            $totalFee += $fee + $withdrawalFeePerRecipient;
+        }
+        
+        $totalAmount = $amount + $totalFee;
+
+        if ($balanceBefore < $totalAmount) {
+            return redirect()->to('/client/multi-transfer')->with('error', 'Solde insuffisant. Solde: ' . $balanceBefore . ' Ar, Montant: ' . $totalAmount . ' Ar');
+        }
+
+        $balanceAfter = $balanceBefore - $totalAmount;
+
+        // Start transaction for atomic operation
+        $db = \Config\Database::connect();
+        $db->transStart();
+
+        try {
+            // Update sender balance
+            $this->clientModel->updateBalance($clientId, $balanceAfter);
+
+            // Create main transaction record
+            $this->transactionModel->createTransaction([
+                'client_id' => $clientId,
+                'operation_type_id' => $operationType['id'],
+                'amount' => $amount,
+                'fee' => $totalFee,
+                'balance_before' => $balanceBefore,
+                'balance_after' => $balanceAfter,
+                'recipient_phone' => implode(', ', $recipients),
+                'description' => 'Multi-envoi de ' . $amount . ' Ar vers ' . $recipientCount . ' destinataires (Frais: ' . $totalFee . ' Ar)',
+                'include_withdrawal_fee' => $includeWithdrawalFee ? 1 : 0,
+                'is_multi_send' => 1,
+                'operator_id' => null
+            ]);
+
+            // Get the transaction ID
+            $transactionId = $db->insertID();
+
+            // Process each recipient
+            $multiSendRecipients = [];
+            foreach ($recipients as $recipientPhone) {
+                // Create or get recipient
+                $recipient = $this->clientModel->getClientByPhone($recipientPhone);
+                if ($recipient === null) {
+                    $this->clientModel->createClient($recipientPhone);
+                    $recipient = $this->clientModel->getClientByPhone($recipientPhone);
+                }
+
+                // Update recipient balance
+                $recipientBalanceBefore = $recipient['balance'];
+                $recipientBalanceAfter = $recipientBalanceBefore + $amountPerRecipient;
+                $this->clientModel->updateBalance($recipient['id'], $recipientBalanceAfter);
+
+                // Add to multi-send recipients
+                $multiSendRecipients[] = [
+                    'transaction_id' => $transactionId,
+                    'recipient_phone' => $recipientPhone,
+                    'amount' => $amountPerRecipient,
+                    'fee' => $withdrawalFeePerRecipient
+                ];
+            }
+
+            // Insert multi-send recipients
+            $multiSendModel = new \App\Models\MultiSendRecipientModel();
+            $multiSendModel->createRecipients($multiSendRecipients);
+
+            $db->transComplete();
+
+            return redirect()->to('/client/dashboard')->with('success', 'Multi-envoi effectue avec succes vers ' . $recipientCount . ' destinataires');
+        } catch (\Exception $e) {
+            $db->transRollback();
+            return redirect()->to('/client/multi-transfer')->with('error', 'Erreur lors du multi-envoi: ' . $e->getMessage());
+        }
+    }
+
     public function transfer(): string
     {
         $clientId = session()->get('client_id');
@@ -209,15 +358,26 @@ class Client extends BaseController
         $client = $this->clientModel->find($clientId);
         $balanceBefore = $client['balance'];
 
-        $operationType = $this->operationTypeModel->getOperationTypeByCode('transfert');
-        $feeBracket = $this->feeBracketModel->getFeeForAmount($operationType['id'], $amount);
-
-        if ($feeBracket === null) {
-            return redirect()->to('/client/transfer')->with('error', 'Aucun bareme de frais trouve pour ce montant');
+        $operationType = $this->operationTypeModel->getByCode('transfert');
+        
+        // Check if recipient is from another operator
+        $otherOperator = $this->otherOperatorPrefixModel->isValidOtherPrefix($recipientPhone);
+        $isOtherOperator = $otherOperator !== null;
+        
+        $includeWithdrawalFee = $this->request->getPost('include_withdrawal_fee') === 'on';
+        
+        // Calculate fee based on operator type
+        $fee = $this->feeBracketModel->calculateFee($operationType['id'], $amount, $isOtherOperator);
+        
+        // Calculate withdrawal fee if requested
+        $withdrawalFee = 0;
+        if ($includeWithdrawalFee) {
+            $withdrawalOperationType = $this->operationTypeModel->getByCode('retrait');
+            $withdrawalFee = $this->feeBracketModel->calculateFee($withdrawalOperationType['id'], $amount, $isOtherOperator);
         }
-
-        $fee = $feeBracket['fee_amount'];
-        $totalAmount = $amount + $fee;
+        
+        $totalFee = $fee + $withdrawalFee;
+        $totalAmount = $amount + $totalFee;
 
         if ($balanceBefore < $totalAmount) {
             return redirect()->to('/client/transfer')->with('error', 'Solde insuffisant. Solde: ' . $balanceBefore . ' Ar, Montant: ' . $totalAmount . ' Ar');
@@ -231,11 +391,14 @@ class Client extends BaseController
             'client_id' => $clientId,
             'operation_type_id' => $operationType['id'],
             'amount' => $amount,
-            'fee' => $fee,
+            'fee' => $totalFee,
             'balance_before' => $balanceBefore,
             'balance_after' => $balanceAfter,
             'recipient_phone' => $recipientPhone,
-            'description' => 'Transfert de ' . $amount . ' Ar vers ' . $recipientPhone . ' (Frais: ' . $fee . ' Ar)'
+            'description' => 'Transfert de ' . $amount . ' Ar vers ' . $recipientPhone . ' (Frais: ' . $totalFee . ' Ar)',
+            'include_withdrawal_fee' => $includeWithdrawalFee ? 1 : 0,
+            'is_multi_send' => 0,
+            'operator_id' => $isOtherOperator ? $otherOperator['id'] : null
         ]);
 
         $recipient = $this->clientModel->getClientByPhone($recipientPhone);

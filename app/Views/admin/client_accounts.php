@@ -17,6 +17,19 @@
                 </div>
             </div>
             <div class="card-body">
+                <form method="get" class="mb-3">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <select class="form-select" name="operator_filter" onchange="this.form.submit()">
+                                <option value="">Tous les operateurs</option>
+                                <option value="033" <?= isset($_GET['operator_filter']) && $_GET['operator_filter'] == '033' ? 'selected' : '' ?>>033</option>
+                                <option value="037" <?= isset($_GET['operator_filter']) && $_GET['operator_filter'] == '037' ? 'selected' : '' ?>>037</option>
+                                <option value="034" <?= isset($_GET['operator_filter']) && $_GET['operator_filter'] == '034' ? 'selected' : '' ?>>034</option>
+                                <option value="038" <?= isset($_GET['operator_filter']) && $_GET['operator_filter'] == '038' ? 'selected' : '' ?>>038</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
                 <?php if (empty($clients)): ?>
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle"></i> Aucun client enregistre

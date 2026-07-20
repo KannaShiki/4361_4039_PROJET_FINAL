@@ -44,6 +44,13 @@
                                        placeholder="Ex: 50000" required min="0.01">
                                 <div class="form-text">Les frais seront appliques selon le bareme en vigueur</div>
                             </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="include_withdrawal_fee" name="include_withdrawal_fee">
+                                <label class="form-check-label" for="include_withdrawal_fee">
+                                    Inclure les frais de retrait dans le montant envoye
+                                </label>
+                                <div class="form-text">Le destinataire recevra le montant exact sans frais de retrait</div>
+                            </div>
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-info">Effectuer le transfert</button>
                                 <a href="<?= base_url('/client/dashboard') ?>" class="btn btn-secondary">Annuler</a>

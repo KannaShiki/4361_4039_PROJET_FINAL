@@ -17,6 +17,8 @@ $routes->get('/client/withdraw', 'Client::withdraw');
 $routes->post('/client/process-withdraw', 'Client::processWithdraw');
 $routes->get('/client/transfer', 'Client::transfer');
 $routes->post('/client/process-transfer', 'Client::processTransfer');
+$routes->get('/client/multi-transfer', 'Client::multiTransfer');
+$routes->post('/client/process-multi-transfer', 'Client::processMultiTransfer');
 $routes->get('/client/history', 'Client::history');
 
 // Admin routes
@@ -33,3 +35,12 @@ $routes->get('/admin/edit-fee-bracket/(:num)', 'Admin::editFeeBracket/$1');
 $routes->post('/admin/update-fee-bracket/(:num)', 'Admin::updateFeeBracket/$1');
 $routes->get('/admin/delete-fee-bracket/(:num)', 'Admin::deleteFeeBracket/$1');
 $routes->get('/admin/client-accounts', 'Admin::clientAccounts');
+$routes->get('/admin/other-operator-prefixes', 'Admin::otherOperatorPrefixes');
+$routes->post('/admin/add-other-operator-prefix', 'Admin::addOtherOperatorPrefix');
+$routes->get('/admin/delete-other-operator-prefix/(:num)', 'Admin::deleteOtherOperatorPrefix/$1');
+$routes->get('/admin/operator-commissions', 'Admin::operatorCommissions');
+$routes->post('/admin/add-operator-commission', 'Admin::addOperatorCommission');
+$routes->get('/admin/edit-operator-commission/(:num)', 'Admin::editOperatorCommission/$1');
+$routes->post('/admin/update-operator-commission/(:num)', 'Admin::updateOperatorCommission/$1');
+$routes->get('/admin/delete-operator-commission/(:num)', 'Admin::deleteOperatorCommission/$1');
+$routes->get('/admin/financial-reports', 'Admin::financialReports');
