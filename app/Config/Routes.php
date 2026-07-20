@@ -5,7 +5,7 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Admin::index');
+$routes->get('/', 'Home::index');
 $routes->post('/client/login', 'Client::login');
 $routes->get('/client/dashboard', 'Client::dashboard');
 $routes->get('/client/logout', 'Client::logout');
@@ -22,6 +22,9 @@ $routes->post('/client/process-multi-transfer', 'Client::processMultiTransfer');
 $routes->get('/client/history', 'Client::history');
 
 // Admin routes
+$routes->get('/admin/login', 'Admin::login');
+$routes->post('/admin/login', 'Admin::processLogin');
+$routes->get('/admin/logout', 'Admin::logout');
 $routes->get('/admin', 'Admin::index');
 $routes->get('/admin/prefixes', 'Admin::prefixes');
 $routes->post('/admin/add-prefix', 'Admin::addPrefix');

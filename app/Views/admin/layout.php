@@ -47,8 +47,8 @@
                         <a class="nav-link" href="/admin/financial-reports">Rapports Financiers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/client" target="_blank">
-                            <i class="bi bi-person"></i> Interface Client
+                        <a class="nav-link" href="/admin/logout">
+                            <i class="bi bi-box-arrow-right"></i> Deconnexion
                         </a>
                     </li>
                 </ul>

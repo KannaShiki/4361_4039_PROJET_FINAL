@@ -30,10 +30,42 @@ class Admin extends BaseController
         $this->operatorCommissionModel = new OperatorCommissionModel();
     }
 
+    // ==================== AUTHENTIFICATION ====================
+
+    public function login(): string
+    {
+        if (session()->get('admin_logged_in')) {
+            return redirect()->to('/admin');
+        }
+        return view('admin/login');
+    }
+
+    public function processLogin()
+    {
+        $username = $this->request->getPost('username');
+        $password = $this->request->getPost('password');
+
+        if ($username === 'admin' && $password === 'admin123') {
+            session()->set('admin_logged_in', true);
+            return redirect()->to('/admin');
+        }
+
+        return redirect()->to('/admin/login')->with('error', 'Identifiants incorrects');
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/');
+    }
+
     // ==================== DASHBOARD ====================
     
     public function index(): string
     {
+        if (!session()->get('admin_logged_in')) {
+            return redirect()->to('/admin/login');
+        }
         $data['title'] = 'Dashboard Admin';
         return view('admin/dashboard', $data);
     }
