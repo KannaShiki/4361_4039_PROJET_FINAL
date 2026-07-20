@@ -1,7 +1,5 @@
 # Taches
 
-# Taches
-
 ## Informations du projet
 - Titre : Systeme d operateur Mobile Money
 - Langage : PHP avec CodeIgniter 4
