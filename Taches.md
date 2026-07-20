@@ -19,14 +19,14 @@
 - Creer la table `transactions` pour l historique complet des operations.
 - Inserer les donnees initiales pour les prefixes, les types d operations et des exemples de frais.
 
-### Cote operateur (Admin) [Sandria]
+### Cote operateur (Admin) [Sandria] OK
 
 - Implementer le CRUD des prefixes operateurs (ajout / suppression).
 - Implementer le CRUD des types d operations.
 - Implementer le CRUD des baremes de frais (tranches modifiables) - tres important.
 - Ajouter une page de vue globale "Situation des comptes clients" avec la liste des clients et leurs soldes.
 
-### Cote client [Miangola]
+### Cote client [Miangola]OK
 
 - Creer une page d accueil permettant un login automatique avec le numero de telephone.
 - Pas d inscription au prealable.
