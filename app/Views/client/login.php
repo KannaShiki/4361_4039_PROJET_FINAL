@@ -28,16 +28,11 @@
                                 <label for="phone_number" class="form-label">Numero de telephone</label>
                                 <input type="text" class="form-control" id="phone_number" name="phone_number" 
                                        placeholder="Ex: 0341234567" required>
-                                <div class="form-text">Entrez votre numero pour vous connecter automatiquement</div>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Se connecter</button>
                             </div>
                         </form>
-                    </div>
-                    <div class="card-footer text-center text-muted">
-                        <small>Pas d'inscription prealable requise</small>
-                    </div>
                 </div>
             </div>
         </div>
