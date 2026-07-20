@@ -364,23 +364,29 @@ class Client extends BaseController
 
         $operationType = $this->operationTypeModel->getByCode('transfert');
         
+        // Calculate transfer fee (always for sender's operator)
+        $transferFee = $this->feeBracketModel->calculateFee($operationType['id'], $amount, false);
+        
         // Check if recipient is from another operator
         $otherOperator = $this->otherOperatorPrefixModel->isValidOtherPrefix($recipientPhone);
         $isOtherOperator = $otherOperator !== null;
         
-        $includeWithdrawalFee = $this->request->getPost('include_withdrawal_fee') === 'on';
+        // Calculate commission for other operator if applicable
+        $commission = 0;
+        if ($isOtherOperator) {
+            $commission = $this->operatorCommissionModel->calculateCommission($otherOperator['id'], $amount);
+        }
         
-        // Calculate fee based on operator type
-        $fee = $this->feeBracketModel->calculateFee($operationType['id'], $amount, $isOtherOperator);
+        $includeWithdrawalFee = $this->request->getPost('include_withdrawal_fee') === 'on';
         
         // Calculate withdrawal fee if requested
         $withdrawalFee = 0;
         if ($includeWithdrawalFee) {
             $withdrawalOperationType = $this->operationTypeModel->getByCode('retrait');
-            $withdrawalFee = $this->feeBracketModel->calculateFee($withdrawalOperationType['id'], $amount, $isOtherOperator);
+            $withdrawalFee = $this->feeBracketModel->calculateFee($withdrawalOperationType['id'], $amount, false);
         }
         
-        $totalFee = $fee + $withdrawalFee;
+        $totalFee = $transferFee + $commission + $withdrawalFee;
         $totalAmount = $amount + $totalFee;
 
         if ($balanceBefore < $totalAmount) {
@@ -399,7 +405,7 @@ class Client extends BaseController
             'balance_before' => $balanceBefore,
             'balance_after' => $balanceAfter,
             'recipient_phone' => $recipientPhone,
-            'description' => 'Transfert de ' . $amount . ' Ar vers ' . $recipientPhone . ' (Frais: ' . $totalFee . ' Ar)',
+            'description' => 'Transfert de ' . $amount . ' Ar vers ' . $recipientPhone . ' (Frais: ' . $transferFee . ' Ar' . ($commission > 0 ? ', Commission: ' . $commission . ' Ar' : '') . ($withdrawalFee > 0 ? ', Frais retrait: ' . $withdrawalFee . ' Ar' : '') . ')',
             'include_withdrawal_fee' => $includeWithdrawalFee ? 1 : 0,
             'is_multi_send' => 0,
             'operator_id' => $isOtherOperator ? $otherOperator['id'] : null
