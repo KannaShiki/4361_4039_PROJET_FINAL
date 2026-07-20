@@ -72,8 +72,17 @@ class Client extends BaseController
         }
 
         $client = $this->clientModel->find($clientId);
+        
+        // Get recent transactions with fee details
+        $recentTransactions = $this->transactionModel->where('client_id', $clientId)
+                                                    ->orderBy('created_at', 'DESC')
+                                                    ->limit(5)
+                                                    ->findAll();
 
-        return view('client/dashboard', ['client' => $client]);
+        return view('client/dashboard', [
+            'client' => $client,
+            'recentTransactions' => $recentTransactions
+        ]);
     }
 
     public function logout()

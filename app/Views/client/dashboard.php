@@ -54,7 +54,7 @@
             </div>
 
             <div class="col-md-8">
-                <div class="card shadow">
+                <div class="card shadow mb-4">
                     <div class="card-header">
                         <h5 class="mb-0">Informations du Compte</h5>
                     </div>
@@ -73,6 +73,53 @@
                                 <td><?= esc($client['created_at']) ?></td>
                             </tr>
                         </table>
+                    </div>
+                </div>
+
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h5 class="mb-0">Dernieres Operations</h5>
+                    </div>
+                    <div class="card-body">
+                        <?php if (empty($recentTransactions)): ?>
+                            <p class="text-muted">Aucune operation recente</p>
+                        <?php else: ?>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Montant</th>
+                                            <th>Frais</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($recentTransactions as $transaction): ?>
+                                            <tr>
+                                                <td><?= substr($transaction['created_at'], 0, 16) ?></td>
+                                                <td>
+                                                    <?= esc($transaction['description']) ?>
+                                                    <?php if ($transaction['is_multi_send']): ?>
+                                                        <span class="badge bg-primary">Multi</span>
+                                                    <?php endif; ?>
+                                                    <?php if ($transaction['include_withdrawal_fee']): ?>
+                                                        <span class="badge bg-info">Frais inclus</span>
+                                                    <?php endif; ?>
+                                                    <?php if ($transaction['operator_id']): ?>
+                                                        <span class="badge bg-warning">Inter-op</span>
+                                                    <?php endif; ?>
+                                                </td>
+                                                <td><?= number_format($transaction['amount'], 0, ',', ' ') ?> Ar</td>
+                                                <td class="<?= $transaction['fee'] > 0 ? 'text-danger' : 'text-muted' ?>">
+                                                    <?= number_format($transaction['fee'], 0, ',', ' ') ?> Ar
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
