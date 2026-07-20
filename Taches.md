@@ -10,7 +10,7 @@
 
 ## Livraison v1
 
-### Base de donnees (base.sql)
+### Base de donnees (base.sql) [Miangola] OK
 
 - Creer la table `operator_prefixes` pour les prefixes autorises (ex. : `033`, `037`).
 - Creer la table `operation_types` pour les types d operations (`depot`, `retrait`, `transfert`).
@@ -19,21 +19,21 @@
 - Creer la table `transactions` pour l historique complet des operations.
 - Inserer les donnees initiales pour les prefixes, les types d operations et des exemples de frais.
 
-### Cote operateur (Admin)
+### Cote operateur (Admin) [Sandria] OK
 
 - Implementer le CRUD des prefixes operateurs (ajout / suppression).
 - Implementer le CRUD des types d operations.
 - Implementer le CRUD des baremes de frais (tranches modifiables) - tres important.
 - Ajouter une page de vue globale "Situation des comptes clients" avec la liste des clients et leurs soldes.
 
-### Cote client
+### Cote client [Miangola]OK
 
 - Creer une page d accueil permettant un login automatique avec le numero de telephone.
 - Pas d inscription au prealable.
 - Verifier que le prefixe du numero est valide.
 - Creer automatiquement le compte client s il n existe pas.
 
-#### Dashboard client
+#### Dashboard client [Miamgola]
 
 - Voir le solde actuel.
 - Faire un depot (simulation automatique).
@@ -41,24 +41,13 @@
 - Faire un transfert vers un autre numero (application des frais).
 - Voir l historique des operations.
 
-### Fonctionnalites transversales
+### Fonctionnalites transversales [Sandria]
 
 - Calcul automatique des frais selon les baremes pour les retraits et les transferts.
 - Mise a jour du solde apres chaque operation.
 - Enregistrement de toutes les operations dans `transactions`.
 - Gestion des erreurs : solde insuffisant, numero invalide, etc.
 - Interface responsive avec Bootstrap.
-
-### Requetes / base.sql
-
-- Le fichier `base.sql` doit contenir un seul script a la racine du projet.
-- Ce fichier doit inclure la creation des tables, des vues et des donnees initiales.
-- Ce fichier est requis pour repondre au point "base.sql" du sujet.
-
-### Travaux par etudiant
-
-- Etudiant 1 : initialisation du schema SQLite, creation des tables et insertion des donnees initiales.
-- Etudiant 2 : definition des types d operations, baremes de frais, et mise en place du suivi des comptes clients.
 
 ### Suivi des livraisons
 

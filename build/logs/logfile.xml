@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="/home/rhia/Musique/4361_4039_PROJET_FINAL/phpunit.xml.dist" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.049963">
+    <testsuite name="App" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.049963">
+      <testsuite name="AdminFeeBracketValidationTest" file="/home/rhia/Musique/4361_4039_PROJET_FINAL/tests/unit/AdminFeeBracketValidationTest.php" tests="1" assertions="1" errors="0" failures="0" skipped="0" time="0.049963">
+        <testcase name="testAdminModelsDoNotUseAutomaticTimestamps" file="/home/rhia/Musique/4361_4039_PROJET_FINAL/tests/unit/AdminFeeBracketValidationTest.php" line="11" class="AdminFeeBracketValidationTest" classname="AdminFeeBracketValidationTest" assertions="1" time="0.049963"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>

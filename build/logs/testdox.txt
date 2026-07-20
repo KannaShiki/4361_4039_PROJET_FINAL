@@ -1,0 +1,3 @@
+Admin Fee Bracket Validation
+ [x] Admin models do not use automatic timestamps
+
