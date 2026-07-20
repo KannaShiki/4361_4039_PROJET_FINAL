@@ -55,15 +55,27 @@
 - Ce fichier doit inclure la creation des tables, des vues et des donnees initiales.
 - Ce fichier est requis pour repondre au point "base.sql" du sujet.
 
-### Travaux par etudiant
-
-- Etudiant 1 : initialisation du schema SQLite, creation des tables et insertion des donnees initiales.
-- Etudiant 2 : definition des types d operations, baremes de frais, et mise en place du suivi des comptes clients.
 
 ### Suivi des livraisons
 
 - A chaque livraison, ajouter dans ce fichier les nouveaux travaux effectues par chaque etudiant.
 - Bien indiquer les modifications realisees pour v1, v2, v3.
+
+#### Livraison v1 - Miangola
+
+**Base de donnees :**
+- Creation du fichier base.sql avec toutes les tables (operator_prefixes, operation_types, fee_brackets, clients, transactions)
+- Insertion des donnees initiales (prefixes 033, 034, 037, 038; types d'operations depot/retrait/transfert; baremes de frais)
+- Initialisation de la base SQLite dans writable/mobilemoney.db
+
+**Cote client :**
+- Creation du modele ClientModel pour la gestion des clients
+- Creation du modele OperatorPrefixModel pour la verification des prefixes
+- Creation du controleur Client avec login automatique, verification de prefixe, creation automatique de compte
+- Creation de la vue client/login.php (page d'accueil avec formulaire de login)
+- Creation de la vue client/dashboard.php (affichage du solde et informations du compte)
+- Configuration des routes dans Routes.php
+- Pas d'inscription prealable, login direct par numero de telephone
 
 ### Livraison
 
