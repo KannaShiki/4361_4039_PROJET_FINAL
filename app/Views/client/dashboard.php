@@ -36,11 +36,16 @@
                         <h5 class="mb-0">Operations</h5>
                     </div>
                     <div class="card-body">
+                        <?php if (session()->get('success')): ?>
+                            <div class="alert alert-success">
+                                <?= session()->get('success') ?>
+                            </div>
+                        <?php endif; ?>
                         <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-success">Depot</a>
-                            <a href="#" class="btn btn-warning">Retrait</a>
-                            <a href="#" class="btn btn-info">Transfert</a>
-                            <a href="#" class="btn btn-secondary">Historique</a>
+                            <a href="<?= base_url('/client/deposit') ?>" class="btn btn-success">Depot</a>
+                            <a href="<?= base_url('/client/withdraw') ?>" class="btn btn-warning">Retrait</a>
+                            <a href="<?= base_url('/client/transfer') ?>" class="btn btn-info">Transfert</a>
+                            <a href="<?= base_url('/client/history') ?>" class="btn btn-secondary">Historique</a>
                         </div>
                     </div>
                 </div>
