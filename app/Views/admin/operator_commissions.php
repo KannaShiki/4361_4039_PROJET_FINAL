@@ -21,9 +21,11 @@
                                 <label for="operator_prefix_id" class="form-label">Operateur</label>
                                 <select class="form-select" id="operator_prefix_id" name="operator_prefix_id" required>
                                     <option value="">Selectionner un operateur</option>
-                                    <?php foreach ($this->otherOperatorPrefixModel->getAllPrefixes() as $operator): ?>
+                                    <?php if (isset($operators)): ?>
+                                        <?php foreach ($operators as $operator): ?>
 <option value="<?= $operator['id'] ?>"><?= $operator['operator_name'] ?> (<?= $operator['prefix'] ?>)</option>
-                                    <?php endforeach; ?>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </select>
                             </div>
                         </div>

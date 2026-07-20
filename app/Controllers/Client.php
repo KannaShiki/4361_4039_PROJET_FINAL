@@ -119,7 +119,7 @@ class Client extends BaseController
 
         $this->clientModel->updateBalance($clientId, $balanceAfter);
 
-        $operationType = $this->operationTypeModel->getOperationTypeByCode('depot');
+        $operationType = $this->operationTypeModel->getByCode('depot');
 
         $this->transactionModel->createTransaction([
             'client_id' => $clientId,
@@ -159,14 +159,9 @@ class Client extends BaseController
         $client = $this->clientModel->find($clientId);
         $balanceBefore = $client['balance'];
 
-        $operationType = $this->operationTypeModel->getOperationTypeByCode('retrait');
-        $feeBracket = $this->feeBracketModel->getFeeForAmount($operationType['id'], $amount);
+        $operationType = $this->operationTypeModel->getByCode('retrait');
+        $fee = $this->feeBracketModel->calculateFee($operationType['id'], $amount, false);
 
-        if ($feeBracket === null) {
-            return redirect()->to('/client/withdraw')->with('error', 'Aucun bareme de frais trouve pour ce montant');
-        }
-
-        $fee = $feeBracket['fee_amount'];
         $totalAmount = $amount + $fee;
 
         if ($balanceBefore < $totalAmount) {

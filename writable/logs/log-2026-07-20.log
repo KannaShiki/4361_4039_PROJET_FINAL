@@ -371,3 +371,14 @@ in SYSTEMPATH/Database/SQLite3/Connection.php on line 163.
 17 VENDORPATH/phpunit/phpunit/src/TextUI/Application.php(211): PHPUnit\TextUI\TestRunner->run()
 18 VENDORPATH/phpunit/phpunit/phpunit(104): PHPUnit\TextUI\Application->run()
 19 VENDORPATH/bin/phpunit(122): include('/home/rhia/Musique/4361_4039_PROJET_FINAL/vendor/phpunit/phpunit/phpunit')
+CRITICAL - 2026-07-20 13:21:22 --> CodeIgniter\Exceptions\BadMethodCallException: Call to undefined method App\Models\OperationTypeModel::getOperationTypeByCode
+[Method: POST, Route: client/process-deposit]
+in SYSTEMPATH/Model.php on line 761.
+ 1 APPPATH/Controllers/Client.php(122): CodeIgniter\Model->__call()
+ 2 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Client->processDeposit()
+ 3 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 4 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 5 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 7 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+ 8 SYSTEMPATH/rewrite.php(44): require_once('/home/gougoula/Documents/S4/SI/4361_4039_PROJET_FINAL/public/index.php')

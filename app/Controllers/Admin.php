@@ -288,6 +288,7 @@ class Admin extends BaseController
     public function operatorCommissions(): string
     {
         $data['commissions'] = $this->operatorCommissionModel->getAllCommissions();
+        $data['operators'] = $this->otherOperatorPrefixModel->getAllPrefixes();
         $data['title'] = 'Commissions Inter-Operateurs';
         return view('admin/operator_commissions', $data);
     }
