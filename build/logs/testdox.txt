@@ -1,3 +1,3 @@
 Admin Fee Bracket Validation
- [ ] Can insert prefix without timestamp columns
+ [x] Admin models do not use automatic timestamps
 
