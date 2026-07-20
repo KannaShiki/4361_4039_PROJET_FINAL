@@ -42,6 +42,7 @@
                                     <th>Solde (Ar)</th>
                                     <th>Date de creation</th>
                                     <th>Derniere mise a jour</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -62,6 +63,11 @@
                                         </td>
                                         <td><?= $client['created_at'] ?></td>
                                         <td><?= $client['updated_at'] ?></td>
+                                        <td>
+                                            <a href="<?= base_url('/admin/client-transactions/' . $client['id']) ?>" class="btn btn-sm btn-primary">
+                                                <i class="bi bi-eye"></i> Voir transactions
+                                            </a>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

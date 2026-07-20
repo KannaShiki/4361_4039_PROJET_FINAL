@@ -6,6 +6,7 @@ use App\Models\OperatorPrefixModel;
 use App\Models\OperationTypeModel;
 use App\Models\FeeBracketModel;
 use App\Models\ClientModel;
+use App\Models\TransactionModel;
 
 class Admin extends BaseController
 {
@@ -13,6 +14,7 @@ class Admin extends BaseController
     protected $operationTypeModel;
     protected $feeBracketModel;
     protected $clientModel;
+    protected $transactionModel;
 
     public function __construct()
     {
@@ -22,6 +24,7 @@ class Admin extends BaseController
         $this->operationTypeModel = new OperationTypeModel();
         $this->feeBracketModel = new FeeBracketModel();
         $this->clientModel = new ClientModel();
+        $this->transactionModel = new TransactionModel();
     }
 
     // ==================== DASHBOARD ====================
@@ -222,11 +225,33 @@ class Admin extends BaseController
     }
 
     // ==================== SITUATION DES COMPTES CLIENTS ====================
-    
+
     public function clientAccounts(): string
     {
         $data['clients'] = $this->clientModel->orderBy('phone_number', 'ASC')->findAll();
         $data['title'] = 'Situation des Comptes Clients';
         return view('admin/client_accounts', $data);
+    }
+
+    // ==================== TRANSACTIONS ====================
+
+    public function transactions(): string
+    {
+        $data['transactions'] = $this->transactionModel->getAllTransactions();
+        $data['title'] = 'Historique des Transactions';
+        return view('admin/transactions', $data);
+    }
+
+    public function clientTransactions($clientId): string
+    {
+        $client = $this->clientModel->find($clientId);
+        if (!$client) {
+            return redirect()->to('/admin/client-accounts')->with('error', 'Client non trouve');
+        }
+
+        $data['client'] = $client;
+        $data['transactions'] = $this->transactionModel->getTransactionsByClientId($clientId);
+        $data['title'] = 'Historique des Transactions - ' . $client['phone_number'];
+        return view('admin/client_transactions', $data);
     }
 }

@@ -100,17 +100,19 @@ class Client extends BaseController
 
         $client = $this->clientModel->find($clientId);
         $balanceBefore = $client['balance'];
+
+        $operationType = $this->operationTypeModel->getByCode('depot');
+        $fee = $this->feeBracketModel->calculateFee($operationType['id'], $amount);
+
         $balanceAfter = $balanceBefore + $amount;
 
         $this->clientModel->updateBalance($clientId, $balanceAfter);
-
-        $operationType = $this->operationTypeModel->getOperationTypeByCode('depot');
 
         $this->transactionModel->createTransaction([
             'client_id' => $clientId,
             'operation_type_id' => $operationType['id'],
             'amount' => $amount,
-            'fee' => 0,
+            'fee' => $fee,
             'balance_before' => $balanceBefore,
             'balance_after' => $balanceAfter,
             'description' => 'Depot de ' . $amount . ' Ar'

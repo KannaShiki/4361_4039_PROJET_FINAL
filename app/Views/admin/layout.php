@@ -34,6 +34,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/admin/client-accounts">Comptes Clients</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/transactions">Transactions</a>
+                    </li>
                 </ul>
             </div>
         </div>
