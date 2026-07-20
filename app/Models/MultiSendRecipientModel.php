@@ -14,9 +14,7 @@ class MultiSendRecipientModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['transaction_id', 'recipient_phone', 'amount', 'fee'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = '';
+    protected $useTimestamps = false;
 
     public function getRecipientsByTransactionId(int $transactionId): array
     {

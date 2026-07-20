@@ -14,9 +14,7 @@ class ClientModel extends Model
     protected $protectFields = true;
     protected $allowedFields = ['phone_number', 'balance'];
 
-    protected $useTimestamps = true;
-    protected $createdField = 'created_at';
-    protected $updatedField = 'updated_at';
+    protected $useTimestamps = false;
 
     protected $validationRules = [
         'phone_number' => 'required|is_unique[clients.phone_number]',
