@@ -8,6 +8,7 @@ use App\Models\FeeBracketModel;
 use App\Models\ClientModel;
 use App\Models\OtherOperatorPrefixModel;
 use App\Models\OperatorCommissionModel;
+use App\Models\TransactionModel;
 
 class Admin extends BaseController
 {
@@ -17,6 +18,7 @@ class Admin extends BaseController
     protected $clientModel;
     protected $otherOperatorPrefixModel;
     protected $operatorCommissionModel;
+    protected $transactionModel;
 
     public function __construct()
     {
@@ -28,6 +30,7 @@ class Admin extends BaseController
         $this->clientModel = new ClientModel();
         $this->otherOperatorPrefixModel = new OtherOperatorPrefixModel();
         $this->operatorCommissionModel = new OperatorCommissionModel();
+        $this->transactionModel = new TransactionModel();
     }
 
     // ==================== AUTHENTIFICATION ====================
@@ -274,6 +277,19 @@ class Admin extends BaseController
         $data['clients'] = $clientsQuery->findAll();
         $data['title'] = 'Situation des Comptes Clients';
         return view('admin/client_accounts', $data);
+    }
+
+    // ==================== TRANSACTIONS ====================
+
+    public function transactions(): string
+    {
+        $data['transactions'] = $this->transactionModel->select('transactions.*, clients.phone_number as client_phone, operation_types.name as operation_name')
+                                                    ->join('clients', 'clients.id = transactions.client_id')
+                                                    ->join('operation_types', 'operation_types.id = transactions.operation_type_id')
+                                                    ->orderBy('transactions.created_at', 'DESC')
+                                                    ->findAll();
+        $data['title'] = 'Toutes les Transactions';
+        return view('admin/transactions', $data);
     }
 
     // ==================== PREFIXES AUTRES OPERATEURS ====================
