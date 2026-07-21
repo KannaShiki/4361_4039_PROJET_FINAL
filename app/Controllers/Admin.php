@@ -228,7 +228,7 @@ class Admin extends BaseController
         $maxAmount = $this->request->getPost('max_amount');
         $feeAmount = $this->request->getPost('fee_amount');
         $feePercentage = $this->request->getPost('fee_percentage');
-        $promotionPercentage = $this->request->getPost('[promotion_percentage');
+        $promotionPercentage = $this->request->getPost('promotion_percentage');
         
         if (!$this->hasRequiredFeeBracketFields($operationTypeId, $minAmount, $maxAmount, $feeAmount)) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Tous les champs sont obligatoires');

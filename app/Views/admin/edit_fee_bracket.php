@@ -50,8 +50,8 @@
                     </div>
                       <div class="mb-3">
                         <label for="promotion_percentage" class="form-label">Pourcentage (%)</label>
-                        <input type="number" class="form-control" id="promotion_percentage" name="promotion_percentage" 
-                               step="0.01" min="0" max="100" value="<?= $feeBracket['fee_percentage'] ?>">
+                        <input type="number" class="form-control" id="promotion_percentage" name="promotion_percentage"
+                               step="0.01" min="0" max="100" value="<?= $feeBracket['promotion_percentage'] ?>">
                     </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-check-circle"></i> Enregistrer

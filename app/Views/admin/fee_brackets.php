@@ -92,18 +92,19 @@
                                         <td><?= number_format($bracket['fee_amount'], 0, ',', ' ') ?> Ar</td>
                                         <td><?= $bracket['fee_percentage'] ?>%</td>
                                         <td>
-                                            <?= php if (!empty($bracket['promotion_percentage']) && $bracket['promotion_percentage']> 0 )?>
+                                            <?php if (!empty($bracket['promotion_percentage']) && $bracket['promotion_percentage']> 0 ): ?>
                                             <span class="badge bg-success"><?= $bracket['promotion_percentage'] ?>%</span>
-                                            <?php else: ?> 
-                                            <a href="/admin/edit-fee-bracket/<?= $bracket['id'] ?>" 
+                                            <?php else: ?>
+                                            <a href="/admin/edit-fee-bracket/<?= $bracket['id'] ?>"
                                                class="btn btn-sm btn-warning">
                                                 <i class="bi bi-pencil"></i> Modifier
                                             </a>
-                                            <a href="/admin/delete-fee-bracket/<?= $bracket['id'] ?>" 
+                                            <a href="/admin/delete-fee-bracket/<?= $bracket['id'] ?>"
                                                class="btn btn-sm btn-danger"
                                                onclick="return confirm('Etes-vous sur de vouloir supprimer ce bareme ?')">
                                                 <i class="bi bi-trash"></i> Supprimer
                                             </a>
+                                            <?php endif; ?>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
