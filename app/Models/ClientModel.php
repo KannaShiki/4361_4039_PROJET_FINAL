@@ -28,6 +28,12 @@ class ClientModel extends Model
         ]
     ];
 
+    Protected $allowedFields = [
+    'savings_balance',
+    'savings_percentage',
+    ];
+
+
     public function getClientByPhone(string $phoneNumber): ?array
     {
         return $this->where('phone_number', $phoneNumber)->first();
@@ -45,5 +51,14 @@ class ClientModel extends Model
     public function updateBalance(int $clientId, float $newBalance): bool
     {
         return $this->update($clientId, ['balance' => $newBalance]);
+    }
+    public function updateSavings( $clientId, $amount, $nPercentage)
+    {
+        $builder = $this->builder();
+        return $builder-> where('id', $clientId)
+                        ->set('savings_balance', "savings_balance + $amount", false)
+                        ->set('savings_percentage', $nPercentage)
+                        ->update();
+                        
     }
 }

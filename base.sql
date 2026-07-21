@@ -98,6 +98,21 @@ CREATE TABLE multi_send_recipients (
     FOREIGN KEY (transaction_id) REFERENCES transactions(id)
 );
 
+CREATE TABLE saving-settings(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    default_percentage DECIMAL(5,2) DEFAULT 20.00,
+    is_active BOOLEAN DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE clients ADD COLUMN saving_percentage DECIMAL(5,2) DEFAULT 20.00;
+ALTER TABLE clients ADD COLUMN saving_balance DECIMAL(10,2) DEFAULT 0;
+
+INSERT INTO saving-settings (default_percentage) VALUES (20.00);
+INSERT INTO operator_types(code, name, description) VALUES ('epargne', 'epargne', 'Prelevement automatique vers compte epargne');
+
+
 -- Insertion des donnees initiales
 
 -- Prefixes autorises

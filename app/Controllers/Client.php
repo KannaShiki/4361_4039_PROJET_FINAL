@@ -26,7 +26,8 @@ class Client extends BaseController
         $this->prefixModel = new OperatorPrefixModel();
         $this->transactionModel = new TransactionModel();
         $this->operationTypeModel = new OperationTypeModel();
-        $this->feeBracketModel = new FeeBracketModel();
+        $this->feeBracke->set('savings_percentage', $nPercentage)
+                        ->update();tModel = new FeeBracketModel();
         $this->otherOperatorPrefixModel = new OtherOperatorPrefixModel();
         $this->operatorCommissionModel = new OperatorCommissionModel();
     }
@@ -102,16 +103,33 @@ class Client extends BaseController
 
     public function processDeposit()
     {
+       
         $clientId = session()->get('client_id');
         if ($clientId === null) {
             return redirect()->to('/client');
         }
 
+        $phone = session()->get('phone_number');
+        $clientModel = model('ClientModel');
+        $client = $clientModel->where('phone_number',$phone)->first();
+
+        if(!$client){
+            return redirect()->back->with('error'-'client non trouve');
+        }
+
         $amount = (float) $this->request->getPost('amount');
+        $percentage = (float) $client['saving_percentage'];
+        $savingAmount = $amount * ($percentage/100);
+        $mainAmount = $amount-$savingAmount;
+
+        $clientModel->update($client['id'],['balance'=> $client[saving_balance]+$savingAmount]);
+        $transactionModel = model('TransactionModel');
+        $transactionModel->insert([])
 
         if ($amount <= 0) {
             return redirect()->to('/client/deposit')->with('error', 'Le montant doit etre superieur a 0');
         }
+       
 
         $client = $this->clientModel->find($clientId);
         $balanceBefore = $client['balance'];
