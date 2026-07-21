@@ -180,7 +180,8 @@ class Admin extends BaseController
         $maxAmount = $this->request->getPost('max_amount');
         $feeAmount = $this->request->getPost('fee_amount');
         $feePercentage = $this->request->getPost('fee_percentage');
-        
+        $promotionPercentage = $this->request->getPost('promotion_percentage');
+
         if (!$this->hasRequiredFeeBracketFields($operationTypeId, $minAmount, $maxAmount, $feeAmount)) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Tous les champs sont obligatoires');
         }
@@ -198,7 +199,8 @@ class Admin extends BaseController
                 'max_amount' => $maxAmountValue,
                 'fee_amount' => (float)$feeAmount,
                 'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0)
-            ];
+                'promotion_percentage' => (float)($promotionPercentage !== null && $promotionPercentage !== '' ? $promotionPercentage : 0)
+                ];
             $this->feeBracketModel->insert($data);
             return redirect()->to('/admin/fee-brackets')->with('success', 'Bareme de frais ajoute avec succes');
         } catch (\Exception $e) {
@@ -226,6 +228,7 @@ class Admin extends BaseController
         $maxAmount = $this->request->getPost('max_amount');
         $feeAmount = $this->request->getPost('fee_amount');
         $feePercentage = $this->request->getPost('fee_percentage');
+        $promotionPercentage = $this->request->getPost('[promotion_percentage');
         
         if (!$this->hasRequiredFeeBracketFields($operationTypeId, $minAmount, $maxAmount, $feeAmount)) {
             return redirect()->to('/admin/fee-brackets')->with('error', 'Tous les champs sont obligatoires');
@@ -244,7 +247,8 @@ class Admin extends BaseController
                 'max_amount' => $maxAmountValue,
                 'fee_amount' => (float)$feeAmount,
                 'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0)
-            ];
+                'promotion_percentage' => (float)($promotionPercentage !== null && $promotionPercentage !== '' ? $promotionPercentage : 0)
+                ];
             $this->feeBracketModel->update($id, $data);
             return redirect()->to('/admin/fee-brackets')->with('success', 'Bareme de frais modifie avec succes');
         } catch (\Exception $e) {

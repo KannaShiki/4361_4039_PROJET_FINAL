@@ -44,6 +44,7 @@ CREATE TABLE fee_brackets (
     fee_amount DECIMAL(10,2) NOT NULL,
     fee_percentage DECIMAL(5,2) DEFAULT 0,
     is_other_operator BOOLEAN DEFAULT 0,
+    promotion_percentage DECIMAL(5,2) DEFAULT 0,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (operation_type_id) REFERENCES operation_types(id)
 );
@@ -177,3 +178,5 @@ INSERT INTO operator_commissions (operator_prefix_id, commission_percentage, com
 VALUES (2, 3, 0); -- Orange: 3%
 INSERT INTO operator_commissions (operator_prefix_id, commission_percentage, commission_amount) 
 VALUES (3, 4, 0); -- Airtel: 4%
+
+ALTER TABLE fee_brackets ADD COLUMN promotion_percentage DECIMAL(5,2) DEFAULT 0;
