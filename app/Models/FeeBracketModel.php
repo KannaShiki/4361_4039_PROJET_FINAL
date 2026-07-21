@@ -12,7 +12,7 @@ class FeeBracketModel extends Model
     protected $returnType = 'array';
     protected $useSoftDeletes = false;
     protected $protectFields = true;
-    protected $allowedFields = ['operation_type_id', 'min_amount', 'max_amount', 'fee_amount', 'fee_percentage', 'is_other_operator'];
+    protected $allowedFields = ['operation_type_id', 'min_amount', 'max_amount', 'fee_amount', 'fee_percentage','promotion_percentage', 'is_other_operator'];
 
     protected $useTimestamps = false;
 
@@ -44,7 +44,12 @@ class FeeBracketModel extends Model
             $fee = $bracket['fee_amount'];
             if ($bracket['fee_percentage'] > 0) {
                 $fee += ($amount * $bracket['fee_percentage'] / 100);
-            }
+            }  
+
+            if (!empty($bracket['promotion_percentage']) && $bracket['promotion_percentage']> 0 ){
+                $fee +=  $fee - ($fee * $bracket['promotion_percentage'] / 100) ;
+            } 
+
             return $fee;
         }
 

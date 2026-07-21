@@ -45,6 +45,11 @@
                         <input type="number" class="form-control" id="fee_percentage" name="fee_percentage" 
                                step="0.01" min="0" max="100" placeholder="Ex: 0" value="0">
                     </div>
+                     <div class="mb-3">
+                        <label for="promotion_percentage" class="form-label">Pourcentage (%)</label>
+                        <input type="number" class="form-control" id="promotion_percentage" name="promotion_percentage" 
+                               step="0.01" min="0" max="100" placeholder="Ex: 0" value="0">
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         <i class="bi bi-plus-circle"></i> Ajouter
                     </button>
@@ -71,6 +76,7 @@
                                     <th>Tranche (Min - Max)</th>
                                     <th>Frais Fixe</th>
                                     <th>Pourcentage</th>
+                                    <th>Promo</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -86,6 +92,9 @@
                                         <td><?= number_format($bracket['fee_amount'], 0, ',', ' ') ?> Ar</td>
                                         <td><?= $bracket['fee_percentage'] ?>%</td>
                                         <td>
+                                            <?= php if (!empty($bracket['promotion_percentage']) && $bracket['promotion_percentage']> 0 )?>
+                                            <span class="badge bg-success"><?= $bracket['promotion_percentage'] ?>%</span>
+                                            <?php else: ?> 
                                             <a href="/admin/edit-fee-bracket/<?= $bracket['id'] ?>" 
                                                class="btn btn-sm btn-warning">
                                                 <i class="bi bi-pencil"></i> Modifier
