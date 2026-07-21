@@ -39,3 +39,13 @@ in APPPATH/Controllers/Admin.php on line 202.
 10 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
 11 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
 12 SYSTEMPATH/rewrite.php(44): require_once('/home/gougoula/Documents/S4/SI/4361_4039_PROJET_FINAL/public/index.php')
+CRITICAL - 2026-07-21 08:28:30 --> TypeError: App\Controllers\Admin::login(): Return value must be of type string, CodeIgniter\HTTP\RedirectResponse returned
+[Method: GET, Route: admin/login]
+in APPPATH/Controllers/Admin.php on line 41.
+ 1 SYSTEMPATH/CodeIgniter.php(951): App\Controllers\Admin->login()
+ 2 SYSTEMPATH/CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController()
+ 3 SYSTEMPATH/CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest()
+ 4 SYSTEMPATH/Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH/Boot.php(68): CodeIgniter\Boot::runCodeIgniter()
+ 6 FCPATH/index.php(59): CodeIgniter\Boot::bootWeb()
+ 7 SYSTEMPATH/rewrite.php(44): require_once('/home/gougoula/Documents/S4/SI/4361_4039_PROJET_FINAL/public/index.php')

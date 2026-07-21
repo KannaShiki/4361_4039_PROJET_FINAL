@@ -35,7 +35,7 @@ class Admin extends BaseController
 
     // ==================== AUTHENTIFICATION ====================
 
-    public function login(): string
+    public function login()
     {
         if (session()->get('admin_logged_in')) {
             return redirect()->to('/admin');
