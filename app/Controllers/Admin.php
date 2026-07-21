@@ -198,7 +198,7 @@ class Admin extends BaseController
                 'min_amount' => $minAmountValue,
                 'max_amount' => $maxAmountValue,
                 'fee_amount' => (float)$feeAmount,
-                'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0)
+                'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0),
                 'promotion_percentage' => (float)($promotionPercentage !== null && $promotionPercentage !== '' ? $promotionPercentage : 0)
                 ];
             $this->feeBracketModel->insert($data);
@@ -246,7 +246,7 @@ class Admin extends BaseController
                 'min_amount' => $minAmountValue,
                 'max_amount' => $maxAmountValue,
                 'fee_amount' => (float)$feeAmount,
-                'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0)
+                'fee_percentage' => (float)($feePercentage !== null && $feePercentage !== '' ? $feePercentage : 0),
                 'promotion_percentage' => (float)($promotionPercentage !== null && $promotionPercentage !== '' ? $promotionPercentage : 0)
                 ];
             $this->feeBracketModel->update($id, $data);
